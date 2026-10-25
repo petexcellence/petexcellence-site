@@ -51,8 +51,8 @@ ff = ''.join(f"@font-face{{font-family:'Poppins';font-style:normal;font-weight:{
 ff += ''.join(f"@font-face{{font-family:'Cormorant Garamond';font-style:normal;font-weight:{w};font-display:swap;src:url(../fonts/cormorant-garamond-latin-{w}-normal.woff2) format('woff2')}}\n" for w in (500, 600, 700))
 css = ff + 'img{height:auto}\n' + '\n'.join(styles)
 # contrato ilustrado (iframe srcdoc): trocar Google Fonts por fontes locais
-ffi = ''.join(f"@font-face{{font-family:Poppins;font-weight:{w};font-display:swap;src:url(/assets/fonts/poppins-latin-{w}-normal.woff2) format('woff2')}}" for w in (400, 500, 600, 700))
-ffi += ''.join(f"@font-face{{font-family:'Cormorant Garamond';font-weight:{w};font-display:swap;src:url(/assets/fonts/cormorant-garamond-latin-{w}-normal.woff2) format('woff2')}}" for w in (600, 700))
+ffi = ''.join(f"@font-face{{font-family:Poppins;font-weight:{w};font-display:swap;src:url(assets/fonts/poppins-latin-{w}-normal.woff2) format('woff2')}}" for w in (400, 500, 600, 700))
+ffi += ''.join(f"@font-face{{font-family:'Cormorant Garamond';font-weight:{w};font-display:swap;src:url(assets/fonts/cormorant-garamond-latin-{w}-normal.woff2) format('woff2')}}" for w in (600, 700))
 js = re.sub(r'<link rel="stylesheet" href="https://fonts\.googleapis\.com[^"]*">', '<style>' + ffi + '</style>', js)
 assert 'googleapis' not in js
 open(f'{OUT}/assets/css/style.css', 'w', encoding='utf-8').write(css)
@@ -94,7 +94,7 @@ body = re.sub(r'<title>[^<]*</title>\s*', '', body, count=1)
 body = re.sub(r'<meta name="claude:[^>]*>\s*', '', body)
 
 CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; "
-       "connect-src 'self' https://viacep.com.br https://brasilapi.com.br; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests")
+       "connect-src 'self' https://viacep.com.br https://brasilapi.com.br; base-uri 'self'; form-action 'self'; object-src 'none'")
 head = f'''<!doctype html>
 <html lang="pt-BR">
 <head>
