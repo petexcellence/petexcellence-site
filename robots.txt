@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://petexcellence.com.br/sitemap.xml
