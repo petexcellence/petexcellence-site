@@ -23,7 +23,7 @@
 <link rel="preload" href="assets/fonts/poppins-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/cormorant-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/img/tutora-e-golden.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="assets/css/style.css?v=57f72d1f">
+<link rel="stylesheet" href="assets/css/style.css?v=970bb1d6">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
@@ -100,23 +100,32 @@
   <div class="wrap">
     <div class="sec-head">
       <p class="kicker">ASSINATURA</p>
-      <h2>Comece agora pelo WhatsApp.</h2>
+      <h2>Feche seu plano em 2 minutos.</h2>
+      <p>Escolha como prefere: falar com a nossa equipe ou contratar aqui mesmo, com o contrato já preenchido.</p>
+    </div>
+    <div class="opc" role="group" aria-label="Como você quer fechar">
+      <button type="button" data-modo="compra" aria-pressed="true"><b>Comprar agora, por aqui</b><span>Contrato preenchido na hora. Adesão e cartão no link seguro do Asaas, ou adesão por Pix.</span></button>
+      <button type="button" data-modo="wa" aria-pressed="false"><b>Fechar pelo WhatsApp</b><span>Preencha o básico e a nossa equipe conclui com você, tira dúvidas e manda o link.</span></button>
+    </div>
+    <div class="sec-head" id="howtoWa" hidden>
       <ol class="howto"><li><b>Preencha</b> marcando as opções (leva 2 minutos).</li><li>Toque em <b>Ver meu contrato</b> para conferir tudo já preenchido.</li><li>Toque em <b>Enviar pelo WhatsApp</b>. Nossa equipe confirma, manda o contrato para assinar e o link do cartão.</li></ol>
     </div>
     <form class="form" id="form" novalidate>
       <p class="summary" id="summary"></p>
+      <p class="hiper" id="hiper" hidden></p>
+      <p class="etapa">1 · VOCÊ E O SEU PET<small>Só o essencial. Leva menos de 1 minuto.</small></p>
       <div><input id="nome" autocomplete="name" placeholder="Nome completo do tutor" aria-label="Nome completo do tutor"></div>
-      <div><input id="tel" autocomplete="tel" inputmode="tel" placeholder="WhatsApp com DDD" aria-label="WhatsApp com DDD"></div>
-      <div><input id="cpf" inputmode="numeric" placeholder="CPF" aria-label="CPF"></div>
-      <div><input id="email" type="email" autocomplete="email" placeholder="E-mail (para receber o contrato)" aria-label="E-mail"></div>
-      <div><input id="cep" inputmode="numeric" autocomplete="postal-code" placeholder="CEP" aria-label="CEP"></div>
-      <div><input id="num" placeholder="Número e complemento" aria-label="Número e complemento"></div>
-      <div class="full"><input id="end" autocomplete="street-address" placeholder="Endereço (preenche sozinho pelo CEP)" aria-label="Endereço"><span class="dlab" id="cepMsg" role="status"></span></div>
       <div><input id="pet" placeholder="Nome do pet" aria-label="Nome do pet"></div>
-      <div><select id="raca" aria-label="Raça"></select></div>
+      <div><input id="tel" autocomplete="tel" inputmode="tel" placeholder="WhatsApp com DDD" aria-label="WhatsApp com DDD"></div>
+      <div><input id="email" type="email" autocomplete="email" placeholder="E-mail (para receber o contrato)" aria-label="E-mail"></div>
+      <div><span class="dlab">Espécie</span><div class="seg" role="group" aria-label="Espécie do pet"><button type="button" data-fsp="Cão" aria-pressed="true">Cão</button><button type="button" data-fsp="Gato" aria-pressed="false">Gato</button></div></div>
       <div><span class="dlab">Sexo do pet</span><div class="seg" role="group" aria-label="Sexo do pet"><button type="button" data-sexo="Macho" aria-pressed="false">Macho</button><button type="button" data-sexo="Fêmea" aria-pressed="false">Fêmea</button></div></div>
-      <div><label class="dlab" for="nasc">Nascimento do pet (aproximado)</label><input id="nasc" type="date"></div>
-      <div class="full"><span class="dlab">O pet tem alguma doença ou condição de saúde hoje?</span><div class="seg" role="group" aria-label="Doença" style="max-width:420px"><button type="button" data-doenca="Não" aria-pressed="false">Não</button><button type="button" data-doenca="Sim" aria-pressed="false">Sim</button></div>
+      <div class="full"><span class="dlab">Raça (toque na lista ou digite para filtrar)</span><input id="racaBusca" placeholder="Ex.: Shih-tzu, SRD, Persa" aria-label="Buscar raça" autocomplete="off"><select id="raca" aria-label="Raça" hidden></select><div class="pills racas" id="racaLista" role="group" aria-label="Lista de raças"></div></div>
+      <div class="full"><span class="dlab">Faixa de peso do pet</span><div class="pills pesos" id="pesos" role="group" aria-label="Faixa de peso"><button type="button" data-kg="4" aria-pressed="false">Até 5 kg</button><button type="button" data-kg="8" aria-pressed="false">5 a 10 kg</button><button type="button" data-kg="13" aria-pressed="false">10 a 15 kg</button><button type="button" data-kg="20" aria-pressed="false">15 a 25 kg</button><button type="button" data-kg="35" aria-pressed="false">Acima de 25 kg</button></div></div>
+      <div class="full"><label class="dlab" for="nasc">Data de nascimento do pet</label><input id="nasc" type="date" style="max-width:320px"><span class="idade" id="idadeTxt" role="status"></span><button type="button" class="linkbtn" id="naoSeiNasc">Não sei a data de nascimento</button>
+        <div class="estbox" id="estBox" hidden><label class="dlab" for="idadeAprox">Qual a idade aproximada?</label><select id="idadeAprox"><option value="">Escolha a idade aproximada</option><option value="0.5">Menos de 1 ano (filhote)</option><option value="1">Cerca de 1 ano</option><option value="2">Cerca de 2 anos</option><option value="3">Cerca de 3 anos</option><option value="4">Cerca de 4 anos</option><option value="5">Cerca de 5 anos</option><option value="6">Cerca de 6 anos</option><option value="7">Cerca de 7 anos</option><option value="8">Cerca de 8 anos</option><option value="9">Cerca de 9 anos</option><option value="10">Cerca de 10 anos</option><option value="11">Cerca de 11 anos</option><option value="12">Cerca de 12 anos</option><option value="13">Cerca de 13 anos</option><option value="14">Cerca de 14 anos</option><option value="15">Cerca de 15 anos</option><option value="16">16 anos ou mais</option></select><span>Criamos uma data aproximada para o cadastro. A idade poderá ser estimada futuramente pelo médico-veterinário, na consulta, e o cadastro é ajustado se precisar.</span></div></div>
+      <div class="full"><span class="dlab">O pet tem alguma doença ou condição de saúde hoje?</span><div class="seg" role="group" aria-label="Doença" style="max-width:560px;grid-template-columns:1fr 1fr 1fr"><button type="button" data-doenca="Não" aria-pressed="false">Não</button><button type="button" data-doenca="Sim" aria-pressed="false">Sim</button><button type="button" data-doenca="Não sei" aria-pressed="false">Não sei</button></div>
+        <p class="dlab" id="naoSeiMsg" hidden style="margin-top:10px;font-size:13px">Sem problema. O médico-veterinário avalia o pet na primeira consulta e registra a história de saúde dele. Isso não muda o preço nem cria carência extra.</p>
         <div class="saude-box" id="saudeBox" hidden>
           <p class="saude-hi"><b>Aqui ele é muito bem-vindo. 💙</b> Aceitamos pets com doenças e comorbidades. Contar agora ajuda a nossa equipe a conhecer a história do seu pet e cuidar melhor dele desde o primeiro dia. Ele tem a mesma cobertura de qualquer pet: valem só as carências normais do contrato, sem carência extra por doença.</p>
           <span class="dlab">Marque o que se aplica (pode marcar mais de um)</span>
@@ -124,15 +133,23 @@
           <div class="pills" id="saudeComo" style="margin-top:14px"><button type="button" data-como="desc" aria-pressed="false">Quero descrever agora</button><button type="button" data-como="consulta" aria-pressed="false">Prefiro explicar na consulta</button></div>
           <textarea id="saudeDesc" rows="3" placeholder="Conte em poucas palavras: desde quando, se usa remédio, se está controlada" hidden></textarea>
         </div></div>
-      <div><select id="pag" aria-label="Pagamento da adesão"><option>Adesão por Pix hoje (libera exames de sangue sem carência)</option><option>Adesão na recepção</option></select></div>
+      <p class="etapa" id="etapa2">2 · CONTRATO E PAGAMENTO<small>Seu contrato já está preenchido. Falta só o endereço, o CPF e escolher como pagar.</small></p>
+      <div><input id="cpf" inputmode="numeric" placeholder="CPF" aria-label="CPF"></div>
+      <div><input id="cep" inputmode="numeric" autocomplete="postal-code" placeholder="CEP" aria-label="CEP"></div>
+      <div class="full"><input id="end" autocomplete="street-address" placeholder="Endereço (preenche sozinho pelo CEP)" aria-label="Endereço"><span class="dlab" id="cepMsg" role="status"></span></div>
+      <div><input id="num" placeholder="Número e complemento" aria-label="Número e complemento"></div>
+      <div><select id="pag" aria-label="Pagamento da adesão"><option>Adesão por Pix hoje (libera exames de sangue sem carência)</option><option>Adesão e mensalidades no cartão de crédito (link seguro)</option><option>Adesão na recepção</option></select></div>
+      <div class="pixbox" id="pixBox"><span><b style="color:var(--ink)">Adesão por Pix: R$ 90,00.</b> Pagando hoje, os exames de sangue dos planos Platinum e Black ficam sem carência.</span><div class="pixrow"><span>Chave Pix (CNPJ)</span> <code id="pixChave">13.350.878/0001-07</code><button type="button" class="btn ghost sm" id="copyPix">Copiar chave Pix</button></div><span>Univet Vitória Veterinária Especializada. Depois do Pix, a mensalidade é cadastrada no cartão de crédito recorrente pelo link seguro.</span></div>
+      <div class="pixbox" id="cartaoBox" hidden><span><b style="color:var(--ink)">Cartão de crédito recorrente.</b> No link seguro do Asaas você paga a adesão (R$ 90,00) e cadastra o cartão, já com a 1ª mensalidade. A mensalidade não ocupa o limite inteiro do cartão. Os dados do cartão são digitados só no Asaas, nunca nesta página.</span></div>
       <div><select id="como" aria-label="Como conheceu"><option value="">Como conheceu o plano?</option><option>Já sou cliente da Univet</option><option>Indicação de amigo</option><option>Instagram</option><option>Google</option><option>Outro</option></select></div>
       <div><input id="ind" placeholder="Indicado por (nome do assinante, opcional)" aria-label="Indicado por"></div>
       <label class="check full"><input type="checkbox" id="aceite"> <span><b>Li e concordo</b> com o contrato do plano (versão 2026.10c). <a href="#" id="lerContrato" style="color:var(--cyan)">Ler o contrato ilustrado</a></span></label>
       <p class="err" id="err" hidden>Preencha nome, WhatsApp e nome do pet e marque “Li e concordo” para continuar.</p>
-      <div class="full actions"><button class="btn ghost" type="button" id="verContrato">Ver meu contrato preenchido</button><button class="btn" type="submit">Enviar cadastro pelo WhatsApp</button><button class="btn ghost" type="button" id="copy">Copiar mensagem</button></div>
+      <div class="full actions"><button class="btn" type="button" id="comprar">Comprar agora</button><button class="btn ghost" type="button" id="verContrato">Ver meu contrato preenchido</button><button class="btn ghost" type="submit" id="enviarWa">Enviar cadastro pelo WhatsApp</button><button class="btn ghost" type="button" id="copy">Copiar mensagem</button></div>
       <p class="msg" id="msg" hidden></p>
-      <p class="full note">Se o WhatsApp não abrir, copie a mensagem e envie para <span class="phone">(27) 98158-4468</span>. Seus dados são usados só para o cadastro e o contrato do plano.</p>
+      <p class="full note">Se o WhatsApp não abrir, copie a mensagem e envie para <span class="phone">(27) 98158-4468</span>. Seus dados são usados só para o cadastro e o contrato do plano. Nenhum pagamento é feito nesta página: o cartão é cadastrado no ambiente seguro do Asaas.</p>
     </form>
+    <div class="obg" id="obrigado" hidden tabindex="-1" aria-live="polite"></div>
   </div>
 </section>
 
@@ -163,8 +180,6 @@
       </ul>
       <div class="team">
         <p><b>Dr. Bernardo Lopes</b> · CRMV-ES 636 · especialização em cirurgia pela Anclivepa-SP, mestrado pela UFES, diretor clínico</p>
-        <p><b>Dra. Ana Carolina Fagundes</b> · CRMV-ES 3922 · anestesiologia veterinária</p>
-        <p><b>Dra. Amanda Cosme Malta</b> · CRMV-ES 03195 · clínica médica e oftalmologia</p>
       </div>
     </div>
   </div>
@@ -172,13 +187,33 @@
 
 <section id="cliente" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head"><p class="kicker">JÁ SOU CLIENTE</p><h2>Consulte o seu plano.</h2><p>Marque o que quer saber. Respondemos pelo WhatsApp, em horário comercial, com o relatório em PDF.</p></div>
+    <div class="sec-head"><p class="kicker">ÁREA DO ASSINANTE</p><h2>Tudo do seu plano, num só lugar.</h2><p>Marque o que precisa. Respondemos pelo WhatsApp, em horário comercial, com o relatório ou o link certo.</p></div>
     <div class="form" style="max-width:860px">
-      <div class="full"><span class="dlab">O que você quer ver? (pode marcar mais de um)</span><div class="pills" id="cQuer"><button type="button" aria-pressed="true">Carências</button><button type="button" aria-pressed="true">Saldo da franquia</button><button type="button" aria-pressed="true">Histórico de atendimentos</button><button type="button" aria-pressed="false">Quanto economizei</button><button type="button" aria-pressed="true">Relatório completo em PDF</button></div></div>
+      <div class="full"><span class="dlab">O que você quer ver? (pode marcar mais de um)</span><div class="pills" id="cQuer"><button type="button" aria-pressed="true">Carências</button><button type="button" aria-pressed="true">Saldo da franquia</button><button type="button" aria-pressed="true">Histórico de atendimentos</button><button type="button" aria-pressed="false">Quanto economizei</button><button type="button" aria-pressed="true">Relatório completo em PDF</button><button type="button" aria-pressed="false">Demonstrativo: plano × particular</button><button type="button" aria-pressed="false">2ª via da mensalidade</button><button type="button" aria-pressed="false">Cadastrar ou trocar o cartão</button><button type="button" aria-pressed="false">Assinar o contrato</button><button type="button" aria-pressed="false">Atualizar meus dados</button></div></div>
       <div><input id="cCpf" inputmode="numeric" placeholder="CPF do titular" aria-label="CPF do titular"></div>
       <div><input id="cPet" placeholder="Nome do pet" aria-label="Nome do pet"></div>
       <p class="err" id="cErr" hidden>Informe o CPF do titular para localizarmos o seu plano.</p>
       <div class="full actions"><button class="btn" type="button" id="cEnviar">Pedir pelo WhatsApp</button></div>
+      <p class="note full" style="margin-top:0">O cartão é cadastrado ou trocado na tela segura do Asaas, pelo link que enviamos: nós nunca vemos o número do cartão.</p>
+    </div>
+    <div class="demo" style="margin-top:48px">
+      <div class="demo-c"><h3>Renova sozinho</h3><p>O plano renova automaticamente a cada 12 meses (cláusula 6.1). Na renovação, as franquias voltam inteiras e as carências já cumpridas não recomeçam.</p></div>
+      <div class="demo-c"><h3>Reajuste claro</h3><p>Uma vez por ano, em julho, pelo IPCA dos últimos 12 meses, com aviso de 30 dias (cláusula 6.2). Sem surpresa na fatura.</p></div>
+      <div class="demo-c"><h3>Aviso a cada uso</h3><p>Depois de cada atendimento pelo plano, você recebe o protocolo, o que foi feito e quanto custaria no particular, no WhatsApp ou no e-mail.</p></div>
+      <div class="demo-c"><h3>Tudo registrado</h3><p>Peça quando quiser o demonstrativo do ano: o que o seu pet usou, o saldo das franquias e a economia em relação ao particular.</p></div>
+    </div>
+    <div class="sec-head" style="margin-top:56px"><p class="kicker">CANCELAMENTO</p><h2>Precisa cancelar? Veja antes como fica.</h2><p>Simulação pela regra do contrato (cláusulas 8.1 a 8.4). O pedido é confirmado pela nossa equipe, com protocolo.</p></div>
+    <div class="form" style="max-width:860px" id="cancForm">
+      <div><span class="dlab">Mensalidade atual (R$)</span><input id="xValor" inputmode="decimal" placeholder="ex.: 129,90" aria-label="Mensalidade atual"></div>
+      <div><span class="dlab">Mês em que o plano foi ativado</span><input id="xAtiv" type="month" aria-label="Mês de ativação"></div>
+      <div class="full"><span class="dlab">Neste ciclo de 12 meses, o pet usou o plano para algo além de consultas, vacinas e corte de unha? (exames, internação, cirurgia, tártaro, sedação, medicação, reembolso)</span><div class="pills" id="xUso"><button type="button" aria-pressed="false" data-v="nao">Não, só consultas, vacinas ou unha</button><button type="button" aria-pressed="false" data-v="sim">Sim, usou outros serviços</button><button type="button" aria-pressed="false" data-v="obito">O pet faleceu</button></div></div>
+      <div class="full msg" id="xRes" hidden></div>
+      <div class="full"><span class="dlab">Motivo (opcional)</span><div class="pills" id="xMot"><button type="button" aria-pressed="false">Valor da mensalidade</button><button type="button" aria-pressed="false">Mudança de cidade</button><button type="button" aria-pressed="false">Pouco uso</button><button type="button" aria-pressed="false">Insatisfação com o atendimento</button><button type="button" aria-pressed="false">Outro</button></div></div>
+      <div><input id="xCpf" inputmode="numeric" placeholder="CPF do titular" aria-label="CPF do titular para cancelamento"></div>
+      <div><input id="xPet" placeholder="Nome do pet" aria-label="Nome do pet para cancelamento"></div>
+      <p class="err" id="xErr" hidden>Informe a mensalidade, o mês de ativação, a resposta sobre o uso e o CPF.</p>
+      <div class="full actions"><button class="btn" type="button" id="xTroca">Prefiro trocar para um plano menor</button><button class="btn ghost" type="button" id="xEnviar">Pedir o cancelamento pelo WhatsApp</button></div>
+      <p class="note full" style="margin-top:0">Simulação informativa: o valor final é conferido pela equipe no seu contrato. O mês do aviso é cobrado normalmente e o plano vale até o fim dos 30 dias.</p>
     </div>
   </div>
 </section>
@@ -206,6 +241,6 @@
   <p>Univet Vitória · Veterinária especializada 24 horas · Av. Judith Leão Castello Ribeiro, 291, Jardim Camburi, Vitória/ES · WhatsApp <span class="phone">(27) 98158-4468</span></p>
   <p>Valores a partir de, para pets jovens de até 15 kg. Coberturas, limites e carências conforme contrato.</p>
 </footer>
-<script src="assets/js/app.js?v=57f72d1f" defer></script>
+<script src="assets/js/app.js?v=970bb1d6" defer></script>
 </body>
 </html>

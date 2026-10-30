@@ -40,14 +40,14 @@ function render(){
 }
 const RACAS={'Cão':['Sem raça definida (SRD)','Tenho dúvidas','Shih-tzu','Yorkshire','Lhasa apso','Poodle','Spitz alemão','Maltês','Pinscher','Dachshund','Buldogue francês','Pug','Beagle','Border collie','Labrador','Golden retriever','Pastor alemão','Rottweiler','Pit bull','Husky siberiano','Outra'],'Gato':['Sem raça definida (SRD)','Tenho dúvidas','Persa','Siamês','Maine coon','Angorá','Ragdoll','Sphynx','British shorthair','Outra']};
 function fillRacas(){const r=$('raca');const cur=r.value;r.textContent='';const o0=document.createElement('option');o0.value='';o0.textContent='Raça do pet';r.appendChild(o0);RACAS[state.sp].forEach(x=>{const o=document.createElement('option');o.textContent=x;r.appendChild(o)});if(RACAS[state.sp].includes(cur))r.value=cur}
-function campos(){const v=price(state.pick);return {plano:state.pick,valor:v?v.toFixed(2):'',especie:state.sp,faixa:AGES[state.band],porte:state.big?'acima de 15 kg':'até 15 kg',tutor:$('nome').value.trim(),tel:$('tel').value.trim(),cpf:$('cpf').value.trim(),email:$('email').value.trim(),cep:$('cep').value.trim(),end:$('end').value.trim(),num:$('num').value.trim(),anos:state.anos,kg:state.kg,sim:new Date().toLocaleDateString('sv-SE'),aceite:$('aceite').checked?aceiteAgora():'',pet:$('pet').value.trim(),raca:$('raca').value,sexo:state.sexo||'',nasc:$('nasc').value,saude:saudeTxt(),pag:$('pag').value,como:$('como').value,ind:$('ind').value.trim()}}
+function campos(){const v=price(state.pick);return {plano:state.pick,valor:v?v.toFixed(2):'',especie:state.sp,faixa:AGES[state.band],porte:state.big?'acima de 15 kg':'até 15 kg',tutor:$('nome').value.trim(),tel:$('tel').value.trim(),cpf:$('cpf').value.trim(),email:$('email').value.trim(),cep:$('cep').value.trim(),end:$('end').value.trim(),num:$('num').value.trim(),anos:state.anos,kg:state.kg,sim:new Date().toLocaleDateString('sv-SE'),aceite:$('aceite').checked?aceiteAgora():'',pet:$('pet').value.trim(),raca:$('raca').value,sexo:state.sexo||'',nasc:$('nasc').value,saude:saudeTxt(),pag:$('pag').value,como:$('como').value,ind:$('ind').value.trim(),nascEst:state.nascEst?'1':''}}
 function message(){
   const c=campos(), v=price(state.pick);
   const code='PE1|'+Object.entries(c).map(([k,x])=>k+'='+encodeURIComponent(x||'')).join('|');
   return 'Olá! Quero assinar o Plano de Saúde Pet Excellence.\n'+
    'Plano: '+c.plano+(v?' ('+brl(v)+'/mês)':'')+'\n'+
    'Pet: '+(c.pet||'-')+' · '+c.especie+' · '+(c.raca||'raça não informada')+' · '+c.anos+' anos · '+c.kg+' kg\n'+
-   (c.sexo?'Sexo: '+c.sexo+'\n':'')+(c.saude?'Saúde: '+c.saude+'\n':'')+'Tutor: '+(c.tutor||'-')+' · '+(c.tel||'')+'\n'+
+   (c.sexo?'Sexo: '+c.sexo+'\n':'')+(c.nasc?'Nascimento: '+c.nasc.split('-').reverse().join('/')+(state.nascEst?' (estimado pelo tutor; idade a confirmar pelo veterinário)':'')+'\n':'')+(c.email?'E-mail: '+c.email+'\n':'')+'Adesão: '+c.pag+'\n'+(c.saude?'Saúde: '+c.saude+'\n':'')+'Tutor: '+(c.tutor||'-')+' · '+(c.tel||'')+'\n'+
    (/Pix/.test(c.pag)&&/Platinum|Black/.test(c.plano)?'Simulação em '+new Date().toLocaleDateString('pt-BR')+': pagando a adesão por Pix hoje, exames de sangue sem carência.\n':'')+(c.aceite?'Aceite: Li e concordo com o contrato v'+CV_VERSAO+' em '+c.aceite+'.\n':'')+'Cadastro (não apagar): '+code;
 }
 $('spDog').addEventListener('click',()=>{state.sp='Cão';fillRacas();$('spDog').setAttribute('aria-pressed','true');$('spCat').setAttribute('aria-pressed','false');render()});
@@ -227,16 +227,116 @@ $('cEnviar').addEventListener('click',()=>{const cpf=$('cCpf').value.replace(/\D
  const q=[...document.querySelectorAll('#cQuer button[aria-pressed="true"]')].map(b=>b.textContent);
  const m='CONSULTA DO PLANO\nCPF: '+$('cCpf').value+'\nPet: '+(pet||'-')+'\nQuero ver: '+(q.join(', ')||'resumo')+'\nCódigo (não apagar): PC1|cpf='+cpf+'|pet='+encodeURIComponent(pet)+'|quer='+encodeURIComponent(q.join(', '));
  const a=document.createElement('a');a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(m);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()});
+/* área do assinante – cancelamento */
+document.querySelectorAll('#xUso button,#xMot button').forEach(b=>b.addEventListener('click',()=>{const g=b.parentElement;g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));simCanc()}));
+$('xCpf').addEventListener('input',e=>{let d=e.target.value.replace(/\D/g,'').slice(0,11);e.target.value=d.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2')});
+['xValor','xAtiv'].forEach(i=>$(i).addEventListener('input',simCanc));
+function brlx(v){return 'R$ '+v.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function simCanc(){const v=parseFloat(String($('xValor').value).replace(/\./g,'').replace(',','.')),at=$('xAtiv').value,u=(document.querySelector('#xUso [aria-pressed="true"]')||{}).dataset?.v;
+  if(!(v>0)||!at||!u){$('xRes').hidden=true;return null}
+  const hj=new Date(),a=new Date(at+'-01T12:00');let meses=(hj.getFullYear()-a.getFullYear())*12+(hj.getMonth()-a.getMonth())+1;meses=Math.max(1,meses);
+  const ciclo=Math.floor((meses-1)/12)+1,mesCiclo=meses-(ciclo-1)*12,rest=Math.max(0,12-mesCiclo-1);
+  const fim=new Date(hj);fim.setDate(fim.getDate()+30);const fimTxt=fim.toLocaleDateString('pt-BR');
+  const sem=u!=='sim'||rest===0,acerto=sem?0:rest*v;
+  const motivo=u==='obito'?'falecimento do pet':(u==='nao'?'no ciclo o pet usou só consultas, vacinas ou unha':(rest===0?'o aviso termina na renovação do ciclo':''));
+  $('xRes').hidden=false;
+  $('xRes').textContent=`Você está no ciclo ${ciclo}, mês ${mesCiclo} de 12.\nO plano continua valendo até ${fimTxt} (30 dias de aviso) e a mensalidade desse mês é cobrada normalmente.\n`+(sem?`Sem valor de acerto: ${motivo}.`:`Acerto do contrato: ${rest} mensalidade(s) que faltam para completar o ciclo × ${brlx(v)} = ${brlx(acerto)}. Pode ser por Pix ou no cartão, à vista ou nas datas de vencimento.\nAntes de decidir: trocar para um plano menor costuma sair mais em conta e mantém o cuidado.`);
+  return {ciclo,mesCiclo,rest,acerto,fimTxt,motivo,u,v}}
+function pedidoCanc(tipo){const r=simCanc(),cpf=$('xCpf').value.replace(/\D/g,''),pet=$('xPet').value.trim();if(!r||cpf.length!==11){$('xErr').hidden=false;return}$('xErr').hidden=true;
+  const mot=(document.querySelector('#xMot [aria-pressed="true"]')||{}).textContent||'';
+  const quer=tipo==='troca'?'Troca para plano menor':'Cancelamento';
+  const m=(tipo==='troca'?'TROCA PARA PLANO MENOR':'PEDIDO DE CANCELAMENTO')+'\nCPF: '+$('xCpf').value+'\nPet: '+(pet||'-')+'\nMensalidade: '+brlx(r.v)+' · ciclo '+r.ciclo+', mês '+r.mesCiclo+'\nSimulação: '+(r.acerto?'acerto de '+brlx(r.acerto):'sem acerto')+'\nMotivo: '+(mot||'-')+'\nCódigo (não apagar): PC1|cpf='+cpf+'|pet='+encodeURIComponent(pet)+'|quer='+encodeURIComponent(quer)+'|acerto='+r.acerto.toFixed(2)+'|motivo='+encodeURIComponent(mot);
+  const a=document.createElement('a');a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(m);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+$('xEnviar').addEventListener('click',()=>pedidoCanc('canc'));$('xTroca').addEventListener('click',()=>pedidoCanc('troca'));
 $('lerContrato').addEventListener('click',e=>{e.preventDefault();$('verContrato').click()});
 $('form').addEventListener('submit',e=>{
   e.preventDefault();
-  if(!$('nome').value.trim()||!$('pet').value.trim()||!$('tel').value.trim()||!$('aceite').checked){$('err').hidden=false;return}
+  if(!$('nome').value.trim()||!$('pet').value.trim()||!$('tel').value.trim()||!$('aceite').checked){$('err').textContent='Preencha nome, WhatsApp e nome do pet e marque “Li e concordo” para continuar.';$('err').hidden=false;return}
   $('err').hidden=true; const m=message(); $('msg').textContent=m; $('msg').hidden=false;
   const a=document.createElement('a'); a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(m); a.target='_blank'; a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove();
+  try{obrigado('wa')}catch(_){}
 });
 $('copy').addEventListener('click',()=>{
   const m=message(); $('msg').textContent=m; $('msg').hidden=false;
   try{navigator.clipboard.writeText(m).then(()=>{$('copy').textContent='Mensagem copiada'},()=>{selectMsg()})}catch(_){selectMsg()}
 });
 function selectMsg(){const r=document.createRange();r.selectNodeContents($('msg'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('copy').textContent='Mensagem selecionada'}
-fillRacas();render();
+
+// ===== Compra rápida (29/10) =====
+// Links seguros do Asaas (adesão + assinatura no cartão). Preencher quando o CEO enviar; vazio = segue pelo WhatsApp.
+const ASAAS_LINK={Gold:'',Platinum:'',Black:''};
+state.modo='compra';state.nascEst=false;
+const aP=()=>state.sexo==='Fêmea'?'a':'o';const AP=()=>aP().toUpperCase();
+function primeiro(n){return (n||'').trim().split(/\s+/)[0]||''}
+function idadeDe(iso){if(!iso)return null;const d=new Date(iso+'T12:00:00'),h=new Date();if(isNaN(d)||d>h)return null;let m=(h.getFullYear()-d.getFullYear())*12+(h.getMonth()-d.getMonth());if(h.getDate()<d.getDate())m--;return {a:Math.floor(m/12),m:m%12}}
+function idadeTexto(x){if(!x)return '';const p=[];if(x.a)p.push(x.a+(x.a===1?' ano':' anos'));if(x.m||!x.a)p.push(x.m+(x.m===1?' mês':' meses'));return p.join(' e ')}
+function aplicaIdade(){const x=idadeDe($('nasc').value);const t=$('idadeTxt');if(!x){t.textContent=$('nasc').value?'Confira a data: ela está no futuro.':'';return}
+ t.textContent=(state.nascEst?'Idade aproximada: ':'Idade: ')+idadeTexto(x)+(state.nascEst?' (data estimada)':'');
+ const r=$('rAge');r.value=Math.min(20,x.a);r.dispatchEvent(new Event('input'))}
+$('nasc').addEventListener('input',()=>{state.nascEst=false;$('estBox').hidden=true;aplicaIdade();atualizaHiper()});
+$('naoSeiNasc').addEventListener('click',()=>{$('estBox').hidden=!$('estBox').hidden;if(!$('estBox').hidden)$('idadeAprox').focus()});
+$('idadeAprox').addEventListener('change',e=>{const v=+e.target.value;if(!e.target.value)return;const d=new Date();d.setMonth(d.getMonth()-Math.round(v*12));d.setDate(1);$('nasc').value=d.toLocaleDateString('sv-SE');state.nascEst=true;aplicaIdade();atualizaHiper()});
+// espécie no formulário (sincroniza com o simulador)
+document.querySelectorAll('[data-fsp]').forEach(b=>b.addEventListener('click',()=>{$(b.dataset.fsp==='Gato'?'spCat':'spDog').click()}));
+// lista de raças clicável
+function listaRacas(){const box=$('racaLista'),q=$('racaBusca').value.trim().toLowerCase(),cur=$('raca').value;box.textContent='';
+ const l=RACAS[state.sp].filter(x=>!q||x.toLowerCase().includes(q));
+ l.forEach(x=>{const b=document.createElement('button');b.type='button';b.textContent=x;b.setAttribute('aria-pressed',String(x===cur));b.addEventListener('click',()=>{escolheRaca(x)});box.appendChild(b)});
+ if(q&&!RACAS[state.sp].some(x=>x.toLowerCase()===q)){const b=document.createElement('button');b.type='button';b.textContent='Usar “'+$('racaBusca').value.trim()+'”';b.addEventListener('click',()=>escolheRaca($('racaBusca').value.trim()));box.appendChild(b)}}
+function escolheRaca(x){const r=$('raca');if(![...r.options].some(o=>o.value===x)){const o=document.createElement('option');o.textContent=x;r.appendChild(o)}r.value=x;$('racaBusca').value=x;listaRacas();atualizaHiper()}
+$('racaBusca').addEventListener('input',()=>{$('raca').value='';listaRacas()});
+{const f0=fillRacas;fillRacas=function(){f0();try{listaRacas()}catch(_){}}}
+// faixa de peso (sincroniza com o simulador)
+document.querySelectorAll('[data-kg]').forEach(b=>b.addEventListener('click',()=>{const r=$('rWt');r.value=b.dataset.kg;r.dispatchEvent(new Event('input'));press('[data-kg]',b);state.pesoOk=true;atualizaHiper()}));
+// não sei (comorbidades)
+document.querySelectorAll('[data-doenca]').forEach(b=>b.addEventListener('click',()=>{$('naoSeiMsg').hidden=state.doenca!=='Não sei'}));
+// forma de pagamento
+function pagBox(){const v=$('pag').value;$('pixBox').hidden=!/Pix/.test(v);$('cartaoBox').hidden=!/cartão/.test(v)}
+$('pag').addEventListener('change',pagBox);
+function copiaTexto(t,btn,ok){try{navigator.clipboard.writeText(t).then(()=>{btn.textContent=ok},()=>{btn.textContent=t})}catch(_){btn.textContent=t}}
+$('copyPix').addEventListener('click',()=>copiaTexto('13350878000107',$('copyPix'),'Chave copiada ✓'));
+// modo: comprar agora × WhatsApp
+function modo(m){state.modo=m;document.querySelectorAll('[data-modo]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.modo===m)));
+ $('howtoWa').hidden=m!=='wa';$('comprar').hidden=m!=='compra';$('enviarWa').className=m==='wa'?'btn':'btn ghost';
+ $('etapa2').querySelector('small').textContent=m==='wa'?'Opcional pelo WhatsApp: se preferir, a equipe completa com você.':'Seu contrato já está preenchido. Falta só o endereço, o CPF e escolher como pagar.'}
+document.querySelectorAll('[data-modo]').forEach(b=>b.addEventListener('click',()=>{modo(b.dataset.modo);$('nome').focus()}));
+// frase personalizada enquanto preenche
+function atualizaHiper(){const n=primeiro($('nome').value),p=$('pet').value.trim(),h=$('hiper');if(!n&&!p){h.hidden=true;return}
+ const v=price(state.pick);h.hidden=false;
+ h.textContent=(n?n+', ':'')+(p?aP()+' '+p+' ':'seu pet ')+'fica protegid'+aP()+' no '+state.pick+(v?' por '+brl(v)+' por mês':'')+', com a Univet 24 horas por perto.'}
+['nome','pet'].forEach(id=>$(id).addEventListener('input',atualizaHiper));
+{const r0=render;render=function(){r0();try{atualizaHiper();const k=state.kg;if(state.pesoOk||k){const t=k<=5?'4':k<=10?'8':k<=15?'13':k<=25?'20':'35';press('[data-kg]',document.querySelector('[data-kg="'+t+'"]'))}}catch(_){}}}
+// argumentos (quebra de objeção) com o nome do tutor e do pet
+function argumentos(n,p){const v=price(state.pick);return [
+ ['“Será que cabe no bolso?”','Por '+(v?brl(v):'um valor fixo')+' por mês, '+n+', '+aP()+' '+p+' tem consultas, vacinas e exames com valor previsível. Uma única ida de emergência costuma custar mais que meses de plano.'],
+ ['“E se eu precisar de madrugada?”','A Univet é 24 horas, todos os dias, com equipe especializada. '+AP()+' '+p+' é atendid'+aP()+' por quem já conhece a história d'+(aP()==='a'?'ela':'ele')+'.'],
+ ['“Vai ter burocracia?”','Não tem operadora no meio: os procedimentos do plano já estão autorizados. Você chega e '+aP()+' '+p+' é atendid'+aP()+'.'],
+ ['“E se '+(aP()==='a'?'ela':'ele')+' já tiver alguma doença?”','Aceitamos pets com doenças e comorbidades, sem carência extra. Se você não souber, o veterinário avalia '+aP()+' '+p+' na primeira consulta.'],
+ ['“E as carências?”','Consultas em horário comercial e vacinas valem desde a ativação.'+(/Platinum|Black/.test(state.pick)?' Pagando a adesão por Pix hoje, os exames de sangue também ficam sem carência.':'')],
+ ['“E se eu mudar de ideia?”','O cancelamento é pelo WhatsApp ou e-mail, com 30 dias de aviso, como está no contrato que você leu.']]}
+function obrigado(via){const c=campos(),n=primeiro(c.tutor)||'tutor',p=c.pet||'seu pet',v=price(state.pick),box=$('obrigado'),link=ASAAS_LINK[state.pick];
+ const pix=/Pix/.test(c.pag),cart=/cartão/.test(c.pag);
+ let passo='';
+ if(via==='compra'){
+  if(cart)passo='<div class="passo"><b>Último passo: adesão e cartão</b><span>No link seguro do Asaas você paga a adesão de R$ 90,00 e cadastra o cartão de crédito recorrente, já com a 1ª mensalidade'+(v?' de '+brl(v):'')+'.</span><div class="pixrow"><button type="button" class="btn sm" id="oPagar">'+(link?'Pagar adesão e cadastrar o cartão':'Receber meu link seguro pelo WhatsApp')+'</button></div></div>';
+  else if(pix)passo='<div class="passo"><b>Último passo: Pix da adesão (R$ 90,00)</b><span>Chave Pix (CNPJ): <b>13.350.878/0001-07</b>, Univet Vitória Veterinária Especializada.</span><div class="pixrow"><button type="button" class="btn sm" id="oPix">Copiar chave Pix</button><button type="button" class="btn ghost sm" id="oComp">Enviar o comprovante pelo WhatsApp</button></div><span>Assim que o Pix cair, enviamos o link seguro para cadastrar o cartão da mensalidade.</span></div>';
+  else passo='<div class="passo"><b>Último passo: adesão na recepção</b><span>Seu cadastro e o contrato ficam prontos. Na recepção da Univet você paga a adesão e cadastra o cartão.</span><div class="pixrow"><button type="button" class="btn sm" id="oComp">Confirmar pelo WhatsApp</button></div></div>';
+ }else passo='<div class="passo"><b>Recebemos seu cadastro pelo WhatsApp</b><span>Nossa equipe confirma os dados, envia o contrato para assinar e o link seguro do cartão.</span></div>';
+ box.innerHTML='<p class="kicker">TUDO CERTO</p><h3></h3><p id="oTxt"></p>'+passo+
+  '<div class="passo"><b>Sua área do assinante</b><span>Consulte carências, saldo da franquia e histórico d'+aP()+' '+esc(p)+' quando quiser.</span><div class="pixrow"><button type="button" class="btn ghost sm" id="oArea">Entrar na minha área</button></div></div>'+
+  '<p style="color:var(--ink)">Por que '+aP()+' '+esc(p)+' está em boas mãos, '+esc(n)+':</p><div class="args">'+argumentos(esc(n),esc(p)).map(a=>'<div><b>'+a[0]+'</b>'+a[1]+'</div>').join('')+'</div>';
+ box.querySelector('h3').textContent='Obrigado, '+n+'! '+AP()+' '+p+' já está quase protegid'+aP()+'.';
+ box.querySelector('#oTxt').textContent='Seu contrato do plano '+state.pick+(v?' ('+brl(v)+'/mês)':'')+' está preenchido com os seus dados e os d'+aP()+' '+p+'. '+(state.nascEst?'A idade d'+aP()+' '+p+' foi estimada e pode ser ajustada pelo médico-veterinário na consulta.':'');
+ const q=id=>box.querySelector('#'+id);
+ if(q('oPagar'))q('oPagar').addEventListener('click',()=>{if(link)window.open(link,'_blank','noopener');abreWa(message()+'\n\nPagamento: '+(link?'abri o link seguro do cartão.':'quero receber o link seguro do cartão (adesão + mensalidade).'))});
+ if(q('oPix'))q('oPix').addEventListener('click',()=>copiaTexto('13350878000107',q('oPix'),'Chave copiada ✓'));
+ if(q('oComp'))q('oComp').addEventListener('click',()=>abreWa(message()+'\n\nAdesão: '+(pix?'segue o comprovante do Pix.':'vou pagar na recepção.')));
+ q('oArea').addEventListener('click',()=>{try{$('cCpf').value=c.cpf;$('cPet').value=c.pet}catch(_){}$('cliente').scrollIntoView({behavior:'smooth'})});
+ box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'});try{box.focus({preventScroll:true})}catch(_){}}
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function abreWa(m){const a=document.createElement('a');a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(m);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+$('comprar').addEventListener('click',()=>{
+ const falta=[];if(!$('nome').value.trim())falta.push('nome');if(!$('pet').value.trim())falta.push('nome do pet');if(!$('tel').value.trim())falta.push('WhatsApp');if(!$('email').value.trim())falta.push('e-mail');if(!$('cpf').value.trim())falta.push('CPF');if(!$('end').value.trim())falta.push('endereço');if(!$('aceite').checked)falta.push('“Li e concordo”');
+ if(falta.length){$('err').textContent='Para comprar agora, falta: '+falta.join(', ')+'.';$('err').hidden=false;return}
+ $('err').hidden=true;$('msg').textContent=message();obrigado('compra')});
+fillRacas();render();pagBox();modo('compra');
