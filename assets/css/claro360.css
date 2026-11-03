@@ -1,0 +1,21 @@
+/* Fundo claro da página Pet Excellence 360 (pedido do CEO, 03/11/2026) – ligado pelo botão ☀️ ou por voz */
+html[data-tema=claro]{--night:#F5F8FC;--night-2:#FFFFFF;--ink:#0F1B33;--mist:#52627E;--line:rgba(15,27,51,.12);--glass:#FFFFFF;--glass2:#F1F5FB;color-scheme:light}
+html[data-tema=claro] body{background:#F5F8FC!important;color:#0F1B33}
+html[data-tema=claro] .hero{background:radial-gradient(70% 90% at 85% 30%,rgba(34,211,238,.16) 0%,rgba(139,92,246,.08) 35%,transparent 70%)}
+html[data-tema=claro] h1 em,html[data-tema=claro] h2 em,html[data-tema=claro] h1 i,html[data-tema=claro] h2 i,html[data-tema=claro] .hero h1 span{background:linear-gradient(92deg,#0891B2,#7C3AED 75%);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-tema=claro] .kicker{color:#0E7490}
+html[data-tema=claro] dialog#dlgContrato{color:#FFFFFF}
+html[data-tema=claro] dialog#dlgContrato::backdrop{background:rgba(255,255,255,.94)}
+html[data-tema=claro] .dlg-top .btn{color:#FFFFFF}
+html[data-tema=claro] #dlgCorpo td,html[data-tema=claro] #dlgCorpo th{color:#FFFFFF}
+html[data-tema=claro] #dlgCorpo p{color:#FFFFFF}
+html[data-tema=claro] body{background:radial-gradient(1200px 700px at 85% -10%,#13305E 0%,#F5F8FC 45%,#050B1A 100%) fixed}
+html[data-tema=claro] .prog{background:rgba(255,255,255,.94)}
+html[data-tema=claro] .prog .tr{background:rgba(15,27,51,0.060)}
+html[data-tema=claro] .rc-p{background:#FFFFFF}
+html[data-tema=claro] #conheca .uvtour{background:#E9EEF5}
+html[data-tema=claro] .plan,html[data-tema=claro] .card,html[data-tema=claro] .pixbox,html[data-tema=claro] .saude-box,html[data-tema=claro] .estbox,html[data-tema=claro] .obg,html[data-tema=claro] .faq details{background:#fff!important;box-shadow:0 4px 16px rgba(15,27,51,.07)}
+html[data-tema=claro] .opc button,html[data-tema=claro] .pills button,html[data-tema=claro] .seg{background:#fff!important}
+html[data-tema=claro] input,html[data-tema=claro] select,html[data-tema=claro] textarea{background:#fff!important;color:#0F1B33!important;border-color:#C9D5E6!important}
+html[data-tema=claro] select option{background:#fff;color:#0F1B33}
+html[data-tema=claro] .btn.ghost{background:#fff;color:#0F1B33;border:1px solid #C9D5E6}
