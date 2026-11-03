@@ -10,6 +10,10 @@ Página de vendas do **Plano de Saúde Pet Excellence**, com a credibilidade da 
 - **Já sou cliente**: consulta de carências, saldo e histórico (a resposta é enviada pela equipe).
 - **Contrato ilustrado** (versão 2026.10c) dentro da própria página.
 
+## Visual 360 (03/11/2026)
+- Logo Pet Excellence 360 (selo 360), fontes Inter locais, faixa e bloco "credibilidade da Univet", cadastro com rótulo dentro do quadro, lista de raças, pagamento em cartões com selo de segurança, gato na imagem principal (foto Pexels, licença livre) e quadro "Por dentro da Univet" (fotos em assets/img/estrutura).
+- Camada sobre a página aprovada em 29/10: assets/css/tema360.css, assets/js/forms360.js e assets/js/conheca360.js (o app.js original não foi alterado).
+
 ## Tecnologia
 Site **100% estático** (HTML, CSS e JavaScript puro), sem servidor e sem banco de dados, publicado pelo **GitHub Pages**.
 
