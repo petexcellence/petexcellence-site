@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://viacep.com.br https://brasilapi.com.br; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://viacep.com.br https://brasilapi.com.br; base-uri 'self'; form-action 'self'; object-src 'none'; frame-src 'self' https://gestao.univetvitoria.com.br">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Pet Excellence 360 – Plano de Saúde Pet | Univet Vitória – veterinária especializada 24 horas</title>
 <meta name="description" content="Plano de saúde para cães e gatos com a credibilidade da Univet, em Jardim Camburi, Vitória/ES. Aqui os procedimentos já estão autorizados. Planos a partir de R$ 69,90/mês. Simule agora.">
@@ -191,22 +191,24 @@
 
 <section id="cliente" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head"><p class="kicker">ÁREA DO ASSINANTE</p><h2>Tudo do seu plano, num só lugar.</h2><p>Marque o que precisa. Respondemos pelo WhatsApp, em horário comercial, com o relatório ou o link certo.</p></div>
+    <div class="sec-head"><p class="kicker">ÁREA DO ASSINANTE</p><h2>Tudo do seu plano, num só lugar.</h2><p>Marque o que precisa e veja na hora, aqui mesmo: carências, franquia, uso, economia, mensalidades e 2ª via. O WhatsApp fica só para quando não resolver.</p></div>
     <div class="form" style="max-width:860px">
-      <div class="full"><span class="dlab">O que você quer ver? (pode marcar mais de um)</span><div class="pills" id="cQuer"><button type="button" aria-pressed="true">Carências</button><button type="button" aria-pressed="true">Saldo da franquia</button><button type="button" aria-pressed="true">Histórico de atendimentos</button><button type="button" aria-pressed="false">Quanto economizei</button><button type="button" aria-pressed="true">Relatório completo em PDF</button><button type="button" aria-pressed="false">Demonstrativo: plano × particular</button><button type="button" aria-pressed="false">2ª via da mensalidade</button><button type="button" aria-pressed="false">Cadastrar ou trocar o cartão</button><button type="button" aria-pressed="false">Assinar o contrato</button><button type="button" aria-pressed="false">Atualizar meus dados</button></div></div>
+      <div class="full"><span class="dlab">O que você quer ver? (pode marcar mais de um)</span><div class="pills" id="cQuer"><button type="button" aria-pressed="true">Carências</button><button type="button" aria-pressed="true">Saldo da franquia</button><button type="button" aria-pressed="true">Histórico de atendimentos</button><button type="button" aria-pressed="false">Quanto economizei</button><button type="button" aria-pressed="true">Relatório completo em PDF</button><button type="button" aria-pressed="false">Demonstrativo: plano × particular</button><button type="button" aria-pressed="false">2ª via da mensalidade</button><button type="button" aria-pressed="false">Cadastrar ou trocar o cartão</button><button type="button" aria-pressed="false">Assinar o contrato</button><button type="button" aria-pressed="false">Atualizar meus dados</button><button type="button" aria-pressed="false">Simular o cancelamento</button></div></div>
       <div><input id="cCpf" inputmode="numeric" placeholder="CPF do titular" aria-label="CPF do titular"></div>
-      <div><input id="cPet" placeholder="Nome do pet" aria-label="Nome do pet"></div>
+      <div><input id="cTel" inputmode="numeric" maxlength="4" placeholder="4 últimos números do celular" aria-label="4 últimos números do celular do cadastro"></div>
+      <input id="cPet" type="hidden">
       <p class="err" id="cErr" hidden>Informe o CPF do titular para localizarmos o seu plano.</p>
       <div class="full actions"><button class="btn" type="button" id="cEnviar">Pedir pelo WhatsApp</button></div>
-      <p class="note full" style="margin-top:0">O cartão é cadastrado ou trocado na tela segura do Asaas, pelo link que enviamos: nós nunca vemos o número do cartão.</p>
+      <p class="note full" style="margin-top:0">O cartão é cadastrado ou trocado na tela segura do Asaas: nós nunca vemos o número do cartão. O celular é o do cadastro do plano.</p>
     </div>
+    <div id="cArea" hidden style="max-width:860px;margin:24px auto 0"></div>
     <div class="demo" style="margin-top:48px">
       <div class="demo-c"><h3>Renova sozinho</h3><p>O plano renova automaticamente a cada 12 meses (cláusula 6.1). Na renovação, as franquias voltam inteiras e as carências já cumpridas não recomeçam.</p></div>
       <div class="demo-c"><h3>Reajuste claro</h3><p>Uma vez por ano, em julho, pelo IPCA dos últimos 12 meses, com aviso de 30 dias (cláusula 6.2). Sem surpresa na fatura.</p></div>
       <div class="demo-c"><h3>Aviso a cada uso</h3><p>Depois de cada atendimento pelo plano, você recebe o protocolo, o que foi feito e quanto custaria no particular, no WhatsApp ou no e-mail.</p></div>
       <div class="demo-c"><h3>Tudo registrado</h3><p>Peça quando quiser o demonstrativo do ano: o que o seu pet usou, o saldo das franquias e a economia em relação ao particular.</p></div>
     </div>
-    <div class="sec-head" style="margin-top:56px"><p class="kicker">CANCELAMENTO</p><h2>Precisa cancelar? Veja antes como fica.</h2><p>Simulação pela regra do contrato (cláusulas 8.1 a 8.4). O pedido é confirmado pela nossa equipe, com protocolo.</p></div>
+    <div class="sec-head" style="margin-top:56px"><p class="kicker">CANCELAMENTO</p><h2>Precisa cancelar? Veja antes como fica.</h2><p>Simulação pela regra do contrato (cláusulas 8.1 a 8.4). Já é assinante? Marque “Simular o cancelamento” acima e toque em Ver agora: o sistema calcula com a sua data de adesão e o uso registrado. O pedido é confirmado pela nossa equipe, com protocolo.</p></div>
     <div class="form" style="max-width:860px" id="cancForm">
       <div><span class="dlab">Mensalidade atual (R$)</span><input id="xValor" inputmode="decimal" placeholder="ex.: 129,90" aria-label="Mensalidade atual"></div>
       <div><span class="dlab">Mês em que o plano foi ativado</span><input id="xAtiv" type="month" aria-label="Mês de ativação"></div>
@@ -248,5 +250,6 @@
 <script src="assets/js/app.js?v=970bb1d6" defer></script>
 <script src="assets/js/forms360.js?v=36003" defer></script>
 <script src="assets/js/conheca360.js?v=36003" defer></script>
+<script src="assets/js/assinante360.js?v=36005" defer></script>
 </body>
 </html>
