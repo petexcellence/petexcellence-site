@@ -294,7 +294,7 @@ document.querySelectorAll('[data-doenca]').forEach(b=>b.addEventListener('click'
 function pagBox(){const v=$('pag').value;$('pixBox').hidden=!/Pix/.test(v);$('cartaoBox').hidden=!/cartão/.test(v)}
 $('pag').addEventListener('change',pagBox);
 function copiaTexto(t,btn,ok){try{navigator.clipboard.writeText(t).then(()=>{btn.textContent=ok},()=>{btn.textContent=t})}catch(_){btn.textContent=t}}
-$('copyPix').addEventListener('click',()=>copiaTexto('13350878000107',$('copyPix'),'Chave copiada ✓'));
+$('copyPix').addEventListener('click',()=>copiaTexto('67311711000158',$('copyPix'),'Chave copiada ✓'));
 // modo: comprar agora × WhatsApp
 function modo(m){state.modo=m;document.querySelectorAll('[data-modo]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.modo===m)));
  $('howtoWa').hidden=m!=='wa';$('comprar').hidden=m!=='compra';$('enviarWa').className=m==='wa'?'btn':'btn ghost';
@@ -319,7 +319,7 @@ function obrigado(via){const c=campos(),n=primeiro(c.tutor)||'tutor',p=c.pet||'s
  let passo='';
  if(via==='compra'){
   if(cart)passo='<div class="passo"><b>Último passo: adesão e cartão</b><span>No link seguro do Asaas você paga a adesão'+(v?' de '+brl(v)+' (uma mensalidade)':' (uma mensalidade)')+' e cadastra o cartão de crédito recorrente, já com a 1ª mensalidade'+(v?' de '+brl(v):'')+'.</span><div class="pixrow"><button type="button" class="btn sm" id="oPagar">'+(link?'Pagar adesão e cadastrar o cartão':'Receber meu link seguro pelo WhatsApp')+'</button></div></div>';
-  else if(pix)passo='<div class="passo"><b>Último passo: Pix da adesão ('+(v?brl(v)+', uma mensalidade':'uma mensalidade')+')</b><span>Chave Pix (CNPJ): <b>13.350.878/0001-07</b>, Univet Vitória Veterinária Especializada.</span><div class="pixrow"><button type="button" class="btn sm" id="oPix">Copiar chave Pix</button><button type="button" class="btn ghost sm" id="oComp">Enviar o comprovante pelo WhatsApp</button></div><span>Assim que o Pix cair, enviamos o link seguro para cadastrar o cartão da mensalidade.</span></div>';
+  else if(pix)passo='<div class="passo"><b>Último passo: Pix da adesão ('+(v?brl(v)+', uma mensalidade':'uma mensalidade')+')</b><span>Chave Pix (CNPJ): <b>67.311.711/0001-58</b>, Pet Excellence Ltda.</span><div class="pixrow"><button type="button" class="btn sm" id="oPix">Copiar chave Pix</button><button type="button" class="btn ghost sm" id="oComp">Enviar o comprovante pelo WhatsApp</button></div><span>Assim que o Pix cair, enviamos o link seguro para cadastrar o cartão da mensalidade.</span></div>';
   else passo='<div class="passo"><b>Último passo: adesão na recepção</b><span>Seu cadastro e o contrato ficam prontos. Na recepção da Univet você paga a adesão e cadastra o cartão.</span><div class="pixrow"><button type="button" class="btn sm" id="oComp">Confirmar pelo WhatsApp</button></div></div>';
  }else passo='<div class="passo"><b>Recebemos seu cadastro pelo WhatsApp</b><span>Nossa equipe confirma os dados, envia o contrato para assinar e o link seguro do cartão.</span></div>';
  box.innerHTML='<p class="kicker">TUDO CERTO</p><h3></h3><p id="oTxt"></p>'+passo+
@@ -329,14 +329,51 @@ function obrigado(via){const c=campos(),n=primeiro(c.tutor)||'tutor',p=c.pet||'s
  box.querySelector('#oTxt').textContent='Seu contrato do plano '+state.pick+(v?' ('+brl(v)+'/mês)':'')+' está preenchido com os seus dados e os d'+aP()+' '+p+'. '+(state.nascEst?'A idade d'+aP()+' '+p+' foi estimada e pode ser ajustada pelo médico-veterinário na consulta.':'');
  const q=id=>box.querySelector('#'+id);
  if(q('oPagar'))q('oPagar').addEventListener('click',()=>{if(link)window.open(link,'_blank','noopener');abreWa(message()+'\n\nPagamento: '+(link?'abri o link seguro do cartão.':'quero receber o link seguro do cartão (adesão + mensalidade).'))});
- if(q('oPix'))q('oPix').addEventListener('click',()=>copiaTexto('13350878000107',q('oPix'),'Chave copiada ✓'));
+ if(q('oPix'))q('oPix').addEventListener('click',()=>copiaTexto('67311711000158',q('oPix'),'Chave copiada ✓'));
  if(q('oComp'))q('oComp').addEventListener('click',()=>abreWa(message()+'\n\nAdesão: '+(pix?'segue o comprovante do Pix.':'vou pagar na recepção.')));
  q('oArea').addEventListener('click',()=>{try{$('cCpf').value=c.cpf;$('cPet').value=c.pet}catch(_){}$('cliente').scrollIntoView({behavior:'smooth'})});
  box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'});try{box.focus({preventScroll:true})}catch(_){}}
 function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function abreWa(m){const a=document.createElement('a');a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(m);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
-$('comprar').addEventListener('click',()=>{
+// ===== Venda online pelo Univet 360 (CEO, 11/11/2026): grava a venda, código de assinatura por e-mail, contrato em PDF e links do Asaas =====
+const API_VENDA='https://gestao.univetvitoria.com.br/api/venda-plano';
+let venda=null;
+async function postVenda(o){try{const r=await fetch(API_VENDA,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});return await r.json()}catch(_){return {erro:'Sem conexão com o sistema.',rede:true}}}
+function contratoAssinado(){const d=cvDadosPagina(aceiteAgora());d.aceite={quando:aceiteAgora(),canal:'página de vendas · código por e-mail'};return cvHTML(d,CAT,NAO_COBRE,LOGO_CV,FOTO_CV)}
+function caixaCodigo(mail){const box=$('obrigado');
+ box.innerHTML='<p class="kicker">ASSINATURA DO CONTRATO</p><h3>Digite o código que enviamos para '+esc(mail||'o seu e-mail')+'</h3>'+
+  '<p>É a sua assinatura eletrônica: confirma que foi você quem leu e aceitou o contrato. Não chegou? Olhe também a caixa de spam ou promoções.</p>'+
+  '<div class="pixrow" style="flex-wrap:wrap;gap:10px"><input id="vCod" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" aria-label="Código de 6 dígitos" style="font-size:22px;letter-spacing:6px;width:9ch;text-align:center">'+
+  '<button type="button" class="btn" id="vAssinar">Assinar contrato</button><button type="button" class="btn ghost sm" id="vReenviar">Reenviar código</button></div>'+
+  '<p class="err" id="vErr" hidden></p>';
+ box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'start'});const q=id=>box.querySelector('#'+id);
+ q('vCod').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,6)});
+ q('vCod').addEventListener('keydown',e=>{if(e.key==='Enter')q('vAssinar').click()});
+ setTimeout(()=>{try{q('vCod').focus()}catch(_){}},400);
+ q('vReenviar').addEventListener('click',async()=>{const r=await postVenda({acao:'reenviar',id:venda.id,token:venda.token});const er=q('vErr');er.hidden=false;er.textContent=r.erro||'Enviamos um novo código.'});
+ q('vAssinar').addEventListener('click',async()=>{const cod=q('vCod').value;const er=q('vErr');if(cod.length!==6){er.hidden=false;er.textContent='Digite os 6 números do código.';return}
+  const bt=q('vAssinar');bt.disabled=true;bt.textContent='Assinando…';er.hidden=true;
+  const r=await postVenda({acao:'assinar',id:venda.id,token:venda.token,codigo:cod,html:contratoAssinado(),versao:CV_VERSAO});
+  bt.disabled=false;bt.textContent='Assinar contrato';
+  if(r.erro){er.hidden=false;er.textContent=r.erro;return}
+  vendaConcluida(r)});}
+function vendaConcluida(r){obrigado('compra');const box=$('obrigado'),ps=box.querySelector('.passo');if(!ps)return;const v=price(state.pick);
+ const a=(u,t,cls)=>'<a class="btn '+(cls||'sm')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+t+'</a>';
+ let h='<b>Contrato nº '+esc(r.numero)+' assinado ✓</b><span>'+(r.enviado?'A cópia em PDF foi para o seu e-mail.':'A cópia em PDF vai chegar no seu e-mail.')+'</span>';
+ if(r.links&&r.links.adesao){h+='<span style="margin-top:6px">Agora é só pagar, na página segura do Asaas (nós nunca vemos o seu cartão):</span><div class="pixrow" style="flex-wrap:wrap;gap:8px">'+
+   a(r.links.adesao,'1. Pagar a adesão'+(v?' ('+brl(v)+(r.forma==='pix'?', Pix':', cartão')+')':''),'sm')+(r.links.mensalidade?a(r.links.mensalidade,'2. Cadastrar o cartão da mensalidade','ghost sm'):'')+'</div>'+
+   '<span style="font-size:13px">O plano é ativado assim que os dois pagamentos forem confirmados. Os links também estão no seu e-mail.</span>'}
+ else if(r.forma==='recepcao')h+='<span>Na recepção da Univet você paga a adesão e cadastra o cartão da mensalidade.</span>';
+ else h+='<span>'+esc(r.aviso||'O link seguro de pagamento vai chegar pelo WhatsApp em instantes.')+'</span>';
+ ps.innerHTML=h;box.scrollIntoView({behavior:'smooth',block:'start'})}
+$('comprar').addEventListener('click',async()=>{
  const falta=[];if(!$('nome').value.trim())falta.push('nome');if(!$('pet').value.trim())falta.push('nome do pet');if(!$('tel').value.trim())falta.push('WhatsApp');if(!$('email').value.trim())falta.push('e-mail');if(!$('cpf').value.trim())falta.push('CPF');if(!$('end').value.trim())falta.push('endereço');if(!$('aceite').checked)falta.push('“Li e concordo”');
  if(falta.length){$('err').textContent='Para comprar agora, falta: '+falta.join(', ')+'.';$('err').hidden=false;return}
- $('err').hidden=true;$('msg').textContent=message();obrigado('compra')});
+ $('err').hidden=true;$('msg').textContent=message();
+ const bt=$('comprar');bt.disabled=true;const t0=bt.textContent;bt.textContent='Enviando…';
+ const r=await postVenda({acao:'iniciar',dados:Object.assign(campos(),{aceite:true})});
+ bt.disabled=false;bt.textContent=t0;
+ if(r.erro&&r.rede){obrigado('compra');return}
+ if(r.erro){$('err').textContent=r.erro;$('err').hidden=false;$('err').scrollIntoView({block:'center'});return}
+ venda={id:r.id,token:r.token,forma:r.forma};caixaCodigo(r.email)});
 fillRacas();render();pagBox();modo('compra');
