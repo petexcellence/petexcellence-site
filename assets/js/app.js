@@ -360,9 +360,9 @@ function caixaCodigo(mail){const box=$('obrigado');
 function vendaConcluida(r){obrigado('compra');const box=$('obrigado'),ps=box.querySelector('.passo');if(!ps)return;const v=price(state.pick);
  const a=(u,t,cls)=>'<a class="btn '+(cls||'sm')+'" href="'+esc(u)+'" target="_blank" rel="noopener">'+t+'</a>';
  let h='<b>Contrato nº '+esc(r.numero)+' assinado ✓</b><span>'+(r.enviado?'A cópia em PDF foi para o seu e-mail.':'A cópia em PDF vai chegar no seu e-mail.')+'</span>';
- if(r.links&&r.links.adesao){h+='<span style="margin-top:6px">Agora é só pagar, na página segura do Asaas (nós nunca vemos o seu cartão):</span><div class="pixrow" style="flex-wrap:wrap;gap:8px">'+
-   a(r.links.adesao,'1. Pagar a adesão'+(v?' ('+brl(v)+(r.forma==='pix'?', Pix':', cartão')+')':''),'sm')+(r.links.mensalidade?a(r.links.mensalidade,'2. Cadastrar o cartão da mensalidade','ghost sm'):'')+'</div>'+
-   '<span style="font-size:13px">O plano é ativado assim que os dois pagamentos forem confirmados. Os links também estão no seu e-mail.</span>'}
+ if(r.links&&r.links.adesao){const tot=r.total||(v?2*v:0);h+='<span style="margin-top:6px">Agora é só um pagamento, na página segura do Asaas (nós nunca vemos o seu cartão):</span><div class="pixrow" style="flex-wrap:wrap;gap:8px">'+
+   a(r.links.adesao,'Pagar agora: adesão + 1ª mensalidade'+(tot?' ('+brl(tot)+')':''),'sm')+'</div>'+
+   '<span style="font-size:13px">'+(r.forma==='cartao'?'No cartão, as próximas mensalidades'+(v?' ('+brl(v)+')':'')+' são cobradas sozinhas todo mês, sem digitar o cartão de novo. ':'')+'O plano é ativado assim que o pagamento for confirmado. O link também está no seu e-mail.</span>'}
  else if(r.forma==='recepcao')h+='<span>Na recepção da Univet você paga a adesão e cadastra o cartão da mensalidade.</span>';
  else h+='<span>'+esc(r.aviso||'O link seguro de pagamento vai chegar pelo WhatsApp em instantes.')+'</span>';
  ps.innerHTML=h;box.scrollIntoView({behavior:'smooth',block:'start'})}
