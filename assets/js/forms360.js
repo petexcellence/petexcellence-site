@@ -2,7 +2,7 @@
 (function(){
 const $=id=>document.getElementById(id);
 const CAMPOS={nome:['Nome completo do tutor','name','text'],pet:['Nome do pet','off','text'],tel:['WhatsApp com DDD','tel-national','tel'],email:['E-mail','email','email'],
-  cpf:['CPF','off','numeric'],cep:['CEP','postal-code','numeric'],end:['Endereço (preenche pelo CEP)','street-address','text'],num:['Número e complemento','address-line2','text'],ind:['Indicado por (opcional)','off','text']};
+  cpf:['CPF','off','numeric'],cep:['CEP','postal-code','numeric'],end:['Endereço (preenche pelo CEP)','street-address','text'],num:['Número e complemento','address-line2','text'],ind:['Código ou nome de quem indicou (opcional)','off','text']};
 // 1) rótulo dentro do quadro
 for(const [id,[rot,ac,im]] of Object.entries(CAMPOS)){const el=$(id);if(!el)continue;const w=document.createElement('div');w.className='fl';el.parentNode.insertBefore(w,el);w.appendChild(el);
   const l=document.createElement('label');l.htmlFor=id;l.textContent=rot;w.appendChild(l);const s=document.createElement('span');s.className='st';s.setAttribute('aria-hidden','true');w.appendChild(s);
